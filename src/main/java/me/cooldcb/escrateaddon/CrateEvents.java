@@ -25,15 +25,12 @@ import java.util.List;
 
 public class CrateEvents implements Listener {
     private final ESCrateAddon plugin;
-    private boolean canUseCommon;
-    private boolean canUseAncient;
-    private boolean canUseDivine;
+    private boolean canUseCommon = true;
+    private boolean canUseAncient = true;
+    private boolean canUseDivine = true;
 
     public CrateEvents(ESCrateAddon instance) {
         plugin = instance;
-        canUseCommon = true;
-        canUseAncient = true;
-        canUseDivine = true;
     }
 
     @EventHandler
