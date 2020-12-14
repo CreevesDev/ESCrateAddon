@@ -13,7 +13,6 @@ public final class ESCrateAddon extends JavaPlugin {
         registerEvents(listeners);
     }
 
-
     public void registerEvents(Listener[] listeners) {
         for (Listener listener : listeners) {
             Bukkit.getServer().getPluginManager().registerEvents(listener, this);

@@ -292,10 +292,10 @@ public class CrateEvents implements Listener {
     }
 
     public void particleSchedule(String[][] particleScheduleArr, Location location) {
-        for (int i = 0; i < particleScheduleArr.length; i++) {
-            Particle particleType = Particle.valueOf(particleScheduleArr[i][0]);
-            int particleCount = Integer.parseInt(particleScheduleArr[i][1]);
-            int delay = Integer.parseInt(particleScheduleArr[i][2]);
+        for (String[] strings : particleScheduleArr) {
+            Particle particleType = Particle.valueOf(strings[0]);
+            int particleCount = Integer.parseInt(strings[1]);
+            int delay = Integer.parseInt(strings[2]);
 
             new BukkitRunnable() {
                 public void run() {
@@ -306,11 +306,11 @@ public class CrateEvents implements Listener {
     }
 
     public void soundSchedule(String[][] soundScheduleArr, Location location) {
-        for (int i = 0; i < soundScheduleArr.length; i++) {
-            Sound sound = Sound.valueOf(soundScheduleArr[i][0]);
-            float volume = Float.parseFloat(soundScheduleArr[i][1]);
-            float pitch = Float.parseFloat(soundScheduleArr[i][2]);
-            int delay = Integer.parseInt(soundScheduleArr[i][3]);
+        for (String[] strings : soundScheduleArr) {
+            Sound sound = Sound.valueOf(strings[0]);
+            float volume = Float.parseFloat(strings[1]);
+            float pitch = Float.parseFloat(strings[2]);
+            int delay = Integer.parseInt(strings[3]);
 
             new BukkitRunnable() {
                 public void run() {
