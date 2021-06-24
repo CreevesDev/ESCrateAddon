@@ -6,7 +6,7 @@ import com.hazebyte.crate.api.crate.CrateAction;
 import com.hazebyte.crate.api.crate.reward.Reward;
 import com.hazebyte.crate.api.event.CrateInteractEvent;
 import com.hazebyte.crate.api.util.PlayerUtil;
-import me.thundertnt33.animatronics.Animatronic;
+import me.thundertnt33.animatronics.api.Animatronic;
 import net.minecraft.core.BlockPosition;
 import org.bukkit.*;
 import org.bukkit.Material;
