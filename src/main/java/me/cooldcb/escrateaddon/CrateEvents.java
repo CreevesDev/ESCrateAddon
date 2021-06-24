@@ -7,12 +7,12 @@ import com.hazebyte.crate.api.crate.reward.Reward;
 import com.hazebyte.crate.api.event.CrateInteractEvent;
 import com.hazebyte.crate.api.util.PlayerUtil;
 import me.thundertnt33.animatronics.Animatronic;
-import net.minecraft.server.v1_15_R1.*;
+import net.minecraft.core.BlockPosition;
 import org.bukkit.*;
 import org.bukkit.Material;
 import org.bukkit.Particle;
-import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_15_R1.util.CraftMagicNumbers;
+import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_17_R1.util.CraftMagicNumbers;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,7 +25,7 @@ import java.util.List;
 
 public class CrateEvents implements Listener {
     private final ESCrateAddon plugin;
-    private boolean canUseCommon = true;
+    private boolean canUseVote = true;
     private boolean canUseAncient = true;
     private boolean canUseDivine = true;
 
@@ -46,8 +46,8 @@ public class CrateEvents implements Listener {
         if (playerAction != CrateAction.OPEN) return;
         event.setCancelled(true);
         switch (event.getCrate().getCrateName()) {
-            case "Common": {
-                doCommonCrateAnimation(event); break;
+            case "Vote": {
+                doVoteCrateAnimation(event); break;
             }
 
             case "Ancient": {
@@ -62,16 +62,16 @@ public class CrateEvents implements Listener {
         }
     }
 
-    public void doCommonCrateAnimation(CrateInteractEvent event) {
+    public void doVoteCrateAnimation(CrateInteractEvent event) {
         Location crateLocation = event.getLocation();
         Player player = event.getPlayer();
-        if (!crateLocation.equals(new Location(Bukkit.getWorld("world"), -342, 90, -2176))) {
+        if (!crateLocation.equals(new Location(Bukkit.getWorld("quest-world"), -342, 90, -2176))) {
             player.sendMessage("§8§l[§d§lE§7§lS§8§l]§c You may not use " + event.getCrate().getCrateName() + " here.");
             return;
         }
 
-        if (!canUseCommon) return;
-        canUseCommon = false;
+        if (!canUseVote) return;
+        canUseVote = false;
         PlayerUtil.removeAnItemInHand(player);
 
         playChestAnimation(crateLocation, true);
@@ -82,13 +82,13 @@ public class CrateEvents implements Listener {
             }
         }.runTaskLater(plugin, 35);
 
-        Animatronic animaCommon = new Animatronic("Common");
-        animaCommon.start();
+        Animatronic animaVote = new Animatronic("Vote");
+        animaVote.start();
 
         Crate crate = event.getCrate();
         List<Reward> prizes = crate.generatePrizes(player);
 
-        EntityEquipment animaArmour = animaCommon.getArmorstand().getEquipment();
+        EntityEquipment animaArmour = animaVote.getArmorstand().getEquipment();
         if (animaArmour != null) {
             animaArmour.setHelmet(prizes.get(0).getDisplayItem());
         }
@@ -101,8 +101,8 @@ public class CrateEvents implements Listener {
                 crate.onRewards(player, prizes);
                 new BukkitRunnable() {
                     public void run() {
-                        animaCommon.gotoStart();
-                        canUseCommon = true;
+                        animaVote.gotoStart();
+                        canUseVote = true;
                         if (animaArmour != null) {
                             animaArmour.setHelmet(new ItemStack(Material.AIR));
                         }
@@ -113,7 +113,7 @@ public class CrateEvents implements Listener {
 
     public void doAncientCrateAnimation(CrateInteractEvent event) {
         Player player = event.getPlayer();
-        if (!event.getLocation().equals(new Location(Bukkit.getWorld("world"), -403, 109, -2010))) {
+        if (!event.getLocation().equals(new Location(Bukkit.getWorld("quest-world"), -403, 109, -2010))) {
             player.sendMessage("§8§l[§d§lE§7§lS§8§l]§c You may not use " + event.getCrate().getCrateName() + " here.");
             return;
         }
@@ -166,7 +166,7 @@ public class CrateEvents implements Listener {
         Animatronic animaAncient = new Animatronic("Ancient");
         animaAncient.start();
 
-        crateLocation.getWorld().playSound(crateLocation, Sound.BLOCK_PORTAL_TRAVEL, 0.3f, 0.1f);
+        crateLocation.getWorld().playSound(crateLocation, Sound.BLOCK_PORTAL_TRAVEL, 0.1f, 0.1f);
 
         new BukkitRunnable() {
             public void run() {
@@ -179,7 +179,7 @@ public class CrateEvents implements Listener {
 
                         EntityEquipment animaArmour = animaAncient.getArmorstand().getEquipment();
                         if (animaArmour != null) {
-                            animaArmour.setHelmet(prizes.get(1).getDisplayItem());
+                            animaArmour.setHelmet(prizes.get(0).getDisplayItem());
                         }
 
                         crateLocation.getWorld().spawnParticle(Particle.ITEM_CRACK, crateLocation.clone().add(0.5, 1.5, 0.5), 8, 0, 0, 0, 0.1, new ItemStack(Material.ENDER_EYE));
@@ -221,7 +221,7 @@ public class CrateEvents implements Listener {
         Player player = event.getPlayer();
         Crate crate = event.getCrate();
         String crateName = crate.getCrateName();
-        if (!event.getLocation().equals(new Location(Bukkit.getWorld("world"), -259, 127, -2079))) {
+        if (!event.getLocation().equals(new Location(Bukkit.getWorld("quest-world"), -259, 127, -2079))) {
             player.sendMessage("§8§l[§d§lE§7§lS§8§l]§c You may not use " + crateName + " here.");
             return;
         }
@@ -260,14 +260,14 @@ public class CrateEvents implements Listener {
 
                 EntityEquipment animaArmour = animaDivine.getArmorstand().getEquipment();
                 if (animaArmour != null) {
-                    animaArmour.setHelmet(prizes.get(1).getDisplayItem());
+                    animaArmour.setHelmet(prizes.get(0).getDisplayItem());
                 }
 
                 new BukkitRunnable() {
                     public void run() {
                         EntityEquipment animaArmour = animaDivine.getArmorstand().getEquipment();
                         if (animaArmour != null) {
-                            animaArmour.setHelmet(prizes.get(1).getDisplayItem());
+                            animaArmour.setHelmet(prizes.get(0).getDisplayItem());
                         }
 
                         new BukkitRunnable() {
@@ -288,7 +288,7 @@ public class CrateEvents implements Listener {
     public void onArmorStandManipulate(PlayerArmorStandManipulateEvent event) {
         ArmorStand armorStand = event.getRightClicked();
         if (armorStand.getCustomName() == null) return;
-        if (armorStand.getCustomName().equals("Common") || armorStand.getCustomName().equals("Ancient") || armorStand.getCustomName().equals("Divine")) event.setCancelled(true);
+        if (armorStand.getCustomName().equals("Vote") || armorStand.getCustomName().equals("Ancient") || armorStand.getCustomName().equals("Divine")) event.setCancelled(true);
     }
 
     public void particleSchedule(String[][] particleScheduleArr, Location location) {
